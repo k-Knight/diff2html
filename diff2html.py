@@ -34,6 +34,7 @@ css_styles = '''
         padding: 0;
         margin: 0;
         white-space: break-spaces;
+        word-break: break-word;
     }
     .row > .column:first-child{
         border-right: 1px solid #bbb;
