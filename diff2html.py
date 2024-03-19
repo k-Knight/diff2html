@@ -122,7 +122,7 @@ css_styles = '''
 
 
 def convert_string_for_html(string):
-    return string..replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    return string.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 
@@ -158,7 +158,7 @@ def convert_to_html(patches_before, patches_after):
                 element_class += ' removed' if line_before[1] == LineType.Rem else ''
                 element_class += ' empty' if line_before[1] == LineType.Empty else ''
                 html_str += '</div><div class="' + element_class + '"><pre>'
-                html_str += convert_string_for_htmlline_before[2])
+                html_str += convert_string_for_html(line_before[2])
                 html_str += '</pre></div></div></div>'
 
                 element_class = 'line-number'
@@ -208,10 +208,13 @@ def parse_diff(diff):
                 if line.line_type == '+':
                     value = (line.target_line_no, LineType.Add, line.value)
                     if len(hunk_before) and hunk_before[-1][1] == LineType.Rem and hunk_after[-1][1] == LineType.Empty:
-                        index = len(hunk_after) - 1
-                        while (hunk_after[index][1] == LineType.Empty):
-                            index -= 1
-                        hunk_after[index + 1] = value
+                        try:
+                            index = len(hunk_after) - 1
+                            while (hunk_after[index][1] == LineType.Empty):
+                                index -= 1
+                            hunk_after[index + 1] = value
+                        except Exception as e:
+                            pass
                     else:
                         hunk_after.append(value)
                         hunk_before.append((0, LineType.Empty, ''))
